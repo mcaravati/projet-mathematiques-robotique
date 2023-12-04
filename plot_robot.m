@@ -6,10 +6,12 @@ function plot_robot(theta)
 
     % DH parameters
     L = [1, 1, 1, 1, 1]; % Replace with your actual link lengths
-    a = [0, L(1), L(2), L(3), L(4), L(5)]; % link lengths
+    a = [1, L(1), L(2), L(3), L(4), L(5)]; % link lengths
 
     % Initialize transformation matrix
     T = eye(3);
+
+    prev_pos = [0,0];
 
     % Plot the robot links
     for i = 1:length(theta)
@@ -20,16 +22,12 @@ function plot_robot(theta)
         joint_position = T(1:2, 3);
 
         % Plot the link
-        if i < length(theta)
-            length(theta)
-            length(a)
-            tmp = T * transformation_matrix(theta(i+1), a(i+1));
-            next_joint_position = tmp(1:2, 3);
-            plot([joint_position(1), next_joint_position(1)], [joint_position(2), next_joint_position(2)], 'bo-');
-        end
-
+        plot([prev_pos(1), joint_position(1)], [prev_pos(2), joint_position(2)], 'bo-');
+        
         % Plot the joint
-        plot(joint_position(1), joint_position(2), 'ro');
+        plot(prev_pos(1), prev_pos(2), 'ro');
+
+        prev_pos=joint_position;
     end
 
     % Plot the end-effector position
