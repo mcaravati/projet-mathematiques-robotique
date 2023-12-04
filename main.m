@@ -11,8 +11,9 @@ y_offset = 2;
 destination = [2, 0.5];
 
 radius = destination(1);
+nb_points=5;
 
-theta = linspace(0, pi/2, 5);
+theta = linspace(0, pi/2, nb_points);
 
 x = radius * cos(theta) + x_offset;
 y = radius * sin(theta) + y_offset;
@@ -23,9 +24,14 @@ y = [y, destination(2)];
 
 plot(x, y, 'o');
 
-thetas_init = [deg2rad(90), 0, 0, 0, 0]
+thetas_init = [deg2rad(90), 0, 0, 0, 0];
 
 rectangle('Position',[1 0 0.75 0.75]);
-thetas = newton_n(thetas_init, [x(1); y(1)])
+thetas = thetas_init;
+
+for i=nb_points:-1:1
+    thetas = newton_n(thetas, [x(i); y(i)]);
+end
+
 plot_robot(thetas); % Vertical position
 

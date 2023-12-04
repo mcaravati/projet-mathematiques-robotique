@@ -2,7 +2,7 @@ function end_effector_position = forward_kinematics(theta)
     display(theta);
     % DH parameters
     L = [1, 1, 1, 1, 1]; % Replace with your actual link lengths
-    a = [0, L(1), L(2), L(3), L(4)]; % link lengths
+    a = [0, L(1), L(2), L(3), L(4), L(5)]; % link lengths
 
     % Compute transformation matrices
     T01 = transformation_matrix(theta(1), a(1));
