@@ -1,6 +1,6 @@
 clear all; close all; clc; clf;
 
-pkg load symbolic;
+%pkg load symbolic;
 
 hold on;
 axis equal;
