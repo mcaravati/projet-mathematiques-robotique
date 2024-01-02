@@ -1,43 +1,43 @@
 clear all; close all; clc; clf;
 
-%pkg load symbolic;
-
 hold on;
 axis equal;
 
-x_offset = 0;
-y_offset = 0;
+start = [0 0.5];
+destination = [2 0.5];
 
-destination = [4., 0.5];
+rectangle_pos = [1 0 0.75 0.75];
+rectangle('Position', rectangle_pos);
 
-radius = destination(1);
-nb_points=5;
-
-theta = linspace(0, pi/2, nb_points);
-
-x = radius * cos(theta) + x_offset;
-y = radius * sin(theta) + y_offset;
-
-% x = flip(x);
-% y = flip(y);
-
-% Add destination point to the curve
-% x = [destination(1), x];
-% y = [destination(2), y];
-
-plot(x, y, 'o');
-
-thetas_init = [deg2rad(90), 0, 0, 0, 0];
-
-rectangle('Position',[1 0 0.75 0.75]);
-thetas = thetas_init;
-
-display(x);
-display(y);
-
-for i=nb_points:-1:2
-    thetas = newton_n(thetas, [x(i); y(i)]);
+function inside = is_in_rectangle(x, rectangle_pos)
+    inside = (x(1) >= rectangle_pos(1)) && (x(1) <= rectangle_pos(1) + rectangle_pos(3)) && ...
+             (x(2) >= rectangle_pos(2)) && (x(2) <= rectangle_pos(2) + rectangle_pos(4));
 end
-plot_robot(thetas); % Vertical position
+
+plot(start(1), start(2), '+r','MarkerSize', 30)
+
+for i = 1:4
+    angle = position_to_angle(start, destination)
+    rad2deg(angle)
+    proj = line_point_svd_with_projection(angle, start);
+    % Move the projected point away from the rectangle if it's inside
+    while is_in_rectangle(proj, rectangle_pos)
+        % Calculate the vector from the projected point to the rectangle center
+        vec_to_center = [rectangle_pos(1) + rectangle_pos(3)/2 - proj(1); rectangle_pos(2) + rectangle_pos(4)/2 - proj(2)]
+
+        % Calculate the normal vector to the rectangle boundary
+        normal_vec = [-vec_to_center(2); vec_to_center(1)];
+
+        % Normalize the normal vector
+        normal_vec = vec_to_center / norm(vec_to_center);
+
+        % Move the projected point away from the rectangle along the boundary
+        proj = proj + 0.01 * vec_to_center; % Adjust the factor as needed
+    end
+
+    start = proj;
+    plot(proj(1), proj(2), 'MarkerSize', 30)
+end
+
 
 

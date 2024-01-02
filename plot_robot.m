@@ -14,7 +14,7 @@ function plot_robot(theta)
     prev_pos = [0,0];
 
     % Plot the robot links
-    for i = 1:length(theta)
+    for i = 1:length(a)
         % Update the transformation matrix
         T = T * transformation_matrix(theta(i), a(i));
 
@@ -22,8 +22,12 @@ function plot_robot(theta)
         joint_position = T(1:2, 3);
 
         % Plot the link
-        plot([prev_pos(1), joint_position(1)], [prev_pos(2), joint_position(2)], 'bo-');
-        
+        if i + 1 < length(theta)
+            tmp = T * transformation_matrix(theta(i+1), a(i+1));
+            next_joint_position = tmp(1:2, 3);
+            plot([joint_position(1), next_joint_position(1)], [joint_position(2), next_joint_position(2)], 'bo-');
+        end
+
         % Plot the joint
         plot(prev_pos(1), prev_pos(2), 'ro');
 
@@ -40,6 +44,5 @@ function plot_robot(theta)
 
     % Show the plot
     title('Robot Manipulator');
-    hold off;
 end
 
