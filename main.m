@@ -7,7 +7,15 @@ start = [0 0.5];
 destination = [2 0.5];
 
 rectangle_pos = [1 0 0.75 0.75];
+
+polygon_x = [start(1), rectangle_pos(1), rectangle_pos(1) + rectangle_pos(3), rectangle_pos(1) + rectangle_pos(3), rectangle_pos(1), start(1)];
+polygon_y = [start(2), rectangle_pos(2) + rectangle_pos(4), rectangle_pos(2) + rectangle_pos(4), rectangle_pos(2), rectangle_pos(2), start(2)];
+
+plot(polygon_x, polygon_y, '.r');
+fill(polygon_x,polygon_y,'r');
 rectangle('Position', rectangle_pos);
+
+
 
 function inside = is_in_rectangle(x, rectangle_pos)
     inside = (x(1) >= rectangle_pos(1)) && (x(1) <= rectangle_pos(1) + rectangle_pos(3)) && ...
