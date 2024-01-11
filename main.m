@@ -57,8 +57,11 @@ rectangle('Position', rectangle_pos, 'FaceColor', 'b');
 thetas_init = [deg2rad(90), 0, 0, 0, 0];
 limbs_length = [1, 1, 1, 1, 1];
 max_robot_length = sum(limbs_length);
+num_steps = 10;
+steps = [];
 
-for i = 1:10
+% Generate trajectory
+for i = 1:num_steps
     % Parameters for the circle
     radius = 0.5;
     num_points = 50;
@@ -78,8 +81,14 @@ for i = 1:10
         endif
     endfor
 
+    steps = [steps start'];
     plot(start(1), start(2), 'MarkerSize', 30)
 end
 
+% Make end effector follow the trajectory
+thetas = thetas_init;
+for i = 1:1
+  thetas = newton_n(thetas, [steps(1,i), steps(2,i)]);
+endfor
 
-
+plot_robot(thetas);
